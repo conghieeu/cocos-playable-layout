@@ -3,10 +3,10 @@ const { ccclass } = _decorator;
 
 @ccclass('AdaptiveLayout')
 export class AdaptiveLayout extends Component {
-    public onResize() {
+    public onResize(aspectRatio: Number) {
         // Handle resize logic here
+        console.log('AdaptiveLayout resized');
     }
- 
 }
 
 

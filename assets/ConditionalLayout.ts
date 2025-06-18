@@ -6,7 +6,7 @@ import { AdaptiveLayout } from './AdaptiveLayout';
 const { ccclass, property, menu } = _decorator;
 
 @ccclass('ConditionalLayout')
-@menu('_MyComponent/UI')
+@menu('_MyComponent/ConditionalLayout')
 export class ConditionalLayout extends AdaptiveLayout {
     @property({
         displayName: "► setVertical"
@@ -38,16 +38,9 @@ export class ConditionalLayout extends AdaptiveLayout {
     transformDataVertical: TransformData = new TransformData();
     @property({ type: TransformData })
     transformDataHorizontal: TransformData = new TransformData();
-    
-    StretchToCameraView: StretchToCameraView | null = null;
 
-    onLoad() {
-        this.StretchToCameraView = this.node.scene.getComponentInChildren(StretchToCameraView);
-    }
-
-    public override onResize() {
-        super.onResize();
-        this.onWindowResize();
+    public override onResize(aspectRatio: number) { 
+        this.onWindowResize(aspectRatio);
     }
 
     private getTransformData() {
@@ -61,12 +54,7 @@ export class ConditionalLayout extends AdaptiveLayout {
         return data;
     }
 
-    private getAspectRatio(): number {
-        return this.StretchToCameraView ? this.StretchToCameraView.getRatio() : 0;
-    }
-
-    private onWindowResize() {
-        const aspectRatio = this.getAspectRatio();
+    private onWindowResize(aspectRatio: number) {
         if (aspectRatio >= 0 && aspectRatio < 1) {
             this.applyTransformData(this.transformDataVertical);
         } else {

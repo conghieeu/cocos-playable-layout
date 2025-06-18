@@ -31,7 +31,7 @@ export class StretchToCameraView extends Component {
     onWindowResize() {
         let size = this.getSize();
         this.node.getComponent(UITransform).setContentSize(size.width, size.height);
-        this.adaptiveLayouts.forEach(layout => layout.onResize());
+        this.adaptiveLayouts.forEach(layout => layout.onResize(this.getRatio()));
     }
 
     public getSize() {
