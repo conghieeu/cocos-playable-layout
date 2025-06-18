@@ -77,6 +77,7 @@ export class StretchToCameraView extends Component {
         let designResolution = view.getVisibleSize();
         let ScreenRatio = screenSize.width / screenSize.height;
         let DesignRatio = designResolution.width / designResolution.height;
+        console.log("Screen width: ", screenSize.width, "Screen height: ", screenSize.height);
         if (ScreenRatio > DesignRatio) {
             designResolution.width = designResolution.height * ScreenRatio;
         }
