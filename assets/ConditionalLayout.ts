@@ -1,12 +1,13 @@
-import { _decorator, Component, Node, view, UITransform, Vec2, Vec3, Quat, Size, CCFloat, director, log } from 'cc'; 
-import { TransformData } from './TransformData';    
+import { _decorator, Component, UITransform } from 'cc';
+import { TransformData } from './TransformData';
 import { StretchToCameraView } from './StretchToCameraView';
+import { AdaptiveLayout } from './AdaptiveLayout';
 
 const { ccclass, property, menu } = _decorator;
 
 @ccclass('ConditionalLayout')
 @menu('_MyComponent/UI')
-export class ConditionalLayout extends Component {
+export class ConditionalLayout extends AdaptiveLayout {
     @property({ type: TransformData })
     transformDataVertical: TransformData = null
     @property({ type: TransformData })
@@ -17,31 +18,44 @@ export class ConditionalLayout extends Component {
     StretchToCameraView: StretchToCameraView | null = null;
 
     @property({
-        displayName: "► setTransformData"
+        displayName: "► setTransformDataVertical"
     })
-    get myButton(): boolean {
+    get setDataVertical(): boolean {
         return false;
     }
-    set myButton(value: boolean) {
+    set setDataVertical(value: boolean) {
         if (value) {
-            this.setTransformData();
+            const data = this.getTransformData();
+            this.transformDataVertical = this.cloneTransformData(data);
         }
     }
 
-    private setTransformData() {
+    @property({
+        displayName: "► setTransformDataHorizontal"
+    })
+    get setDataHorizontal(): boolean {
+        return false;
+    }
+    set setDataHorizontal(value: boolean) {
+        if (value) {
+            const data = this.getTransformData();
+            this.transformDataHorizontal = this.cloneTransformData(data);
+        }
+    }
+
+    public override onResize() {
+        super.onResize();
+        this.onWindowResize();
+    }
+
+    private getTransformData() {
         const data = new TransformData();
         data.position = this.node.position;
         data.rotation = this.node.rotation;
         data.scale = this.node.scale;
         data.size = this.node.getComponent(UITransform)?.contentSize;
         data.anchorPoint = this.node.getComponent(UITransform)?.anchorPoint;
-        if (this.getAspectRatio() >= 0 && this.getAspectRatio() < 1) {
-            this.transformDataVertical = data;
-        }
-        else {
-            this.transformDataHorizontal = data;
-        }
-        console.log("Transform data set for aspect ratio:", this.getAspectRatio(), "Vertical:", this.transformDataVertical, "Horizontal:", this.transformDataHorizontal);
+        return data;
     }
 
     private getAspectRatio(): number {
@@ -67,5 +81,29 @@ export class ConditionalLayout extends Component {
             uiTransform.setContentSize(data.size);
             uiTransform.anchorPoint = data.anchorPoint;
         }
+    }
+
+    private cloneTransformData(source: TransformData): TransformData {
+        const clone = new TransformData();
+        // Copy position
+        clone.position.x = source.position.x;
+        clone.position.y = source.position.y;
+        clone.position.z = source.position.z;
+        // Copy rotation
+        clone.rotation.x = source.rotation.x;
+        clone.rotation.y = source.rotation.y;
+        clone.rotation.z = source.rotation.z;
+        clone.rotation.w = source.rotation.w;
+        // Copy scale
+        clone.scale.x = source.scale.x;
+        clone.scale.y = source.scale.y;
+        clone.scale.z = source.scale.z;
+        // Copy size
+        clone.size.width = source.size.width;
+        clone.size.height = source.size.height;
+        // Copy anchor point
+        clone.anchorPoint.x = source.anchorPoint.x;
+        clone.anchorPoint.y = source.anchorPoint.y;
+        return clone;
     }
 }
