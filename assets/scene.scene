@@ -576,6 +576,9 @@
     "_enabled": true,
     "__prefab": null,
     "adaptiveLayouts": [],
+    "camera": {
+      "__id__": 4
+    },
     "_id": "e4AIbXTqRN94QmjdHbx3U7"
   },
   {

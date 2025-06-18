@@ -1,4 +1,4 @@
-import { _decorator, Component, screen, view, UITransform } from 'cc';
+import { Camera, _decorator, Component, screen, view, UITransform } from 'cc';
 import { ConditionalLayout } from './ConditionalLayout';
 import { AdaptiveLayout } from './AdaptiveLayout';
 const { ccclass, property } = _decorator;
@@ -36,6 +36,9 @@ export class StretchToCameraView extends Component {
     })
     adaptiveLayouts: AdaptiveLayout[] = [];
 
+    @property(Camera)
+    camera: Camera | null = null;
+
     onLoad() {
         this.getAllAdaptiveLayouts();
         view.setResizeCallback(() => {
@@ -70,6 +73,8 @@ export class StretchToCameraView extends Component {
         let size = this.getSize();
         this.node.getComponent(UITransform).setContentSize(size.width, size.height);
         this.adaptiveLayouts.forEach(layout => layout.onResize(this.getRatio()));
+        let cameraOffset = this.camera.orthoHeight / 668;
+        this.node.getComponent(UITransform).setContentSize(size.width * cameraOffset, size.height * cameraOffset);
     }
 
     public getSize() {
@@ -77,13 +82,12 @@ export class StretchToCameraView extends Component {
         let designResolution = view.getVisibleSize();
         let ScreenRatio = screenSize.width / screenSize.height;
         let DesignRatio = designResolution.width / designResolution.height;
-        console.log("Screen width: ", screenSize.width, "Screen height: ", screenSize.height);
         if (ScreenRatio > DesignRatio) {
             designResolution.width = designResolution.height * ScreenRatio;
         }
         else {
             designResolution.height = designResolution.width * (1 / ScreenRatio);
-        }
+        } 
         return {
             width: designResolution.width,
             height: designResolution.height
