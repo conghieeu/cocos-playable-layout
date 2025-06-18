@@ -13,16 +13,20 @@ export class StretchToCameraView extends Component {
     adaptiveLayouts: AdaptiveLayout[] = [];
 
     onLoad() {
+        this.getAllAdaptiveLayouts();
         view.setResizeCallback(() => {
             this.onWindowResize();
         });
+    }
+
+    protected start(): void {
         this.onWindowResize();
     }
 
     public getRatio() {
         let ratio = this.node.getComponent(UITransform).width / this.node.getComponent(UITransform).height;
         return ratio;
-    } 
+    }
 
     onWindowResize() {
         let size = this.getSize();
@@ -46,4 +50,9 @@ export class StretchToCameraView extends Component {
             height: designResolution.height
         }
     }
+
+    private getAllAdaptiveLayouts() {
+        const allLayouts = this.node.scene.getComponentsInChildren(AdaptiveLayout);
+        this.adaptiveLayouts = allLayouts;
+    } 
 }

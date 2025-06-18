@@ -14,4 +14,6 @@ export class TransformData {
     public size: Size = new Size(100, 100);
     @property
     public anchorPoint: Vec2 = new Vec2(0.5, 0.5);
+    @property
+    public active: boolean = true;
 }

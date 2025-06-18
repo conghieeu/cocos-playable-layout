@@ -8,17 +8,8 @@ const { ccclass, property, menu } = _decorator;
 @ccclass('ConditionalLayout')
 @menu('_MyComponent/UI')
 export class ConditionalLayout extends AdaptiveLayout {
-    @property({ type: TransformData })
-    transformDataVertical: TransformData = null
-    @property({ type: TransformData })
-    transformDataHorizontal: TransformData = null
     @property({
-        type: StretchToCameraView
-    })
-    StretchToCameraView: StretchToCameraView | null = null;
-
-    @property({
-        displayName: "► setTransformDataVertical"
+        displayName: "► setVertical"
     })
     get setDataVertical(): boolean {
         return false;
@@ -31,7 +22,7 @@ export class ConditionalLayout extends AdaptiveLayout {
     }
 
     @property({
-        displayName: "► setTransformDataHorizontal"
+        displayName: "► setHorizontal"
     })
     get setDataHorizontal(): boolean {
         return false;
@@ -41,6 +32,17 @@ export class ConditionalLayout extends AdaptiveLayout {
             const data = this.getTransformData();
             this.transformDataHorizontal = this.cloneTransformData(data);
         }
+    }
+
+    @property({ type: TransformData })
+    transformDataVertical: TransformData = new TransformData();
+    @property({ type: TransformData })
+    transformDataHorizontal: TransformData = new TransformData();
+    
+    StretchToCameraView: StretchToCameraView | null = null;
+
+    onLoad() {
+        this.StretchToCameraView = this.node.scene.getComponentInChildren(StretchToCameraView);
     }
 
     public override onResize() {
@@ -55,6 +57,7 @@ export class ConditionalLayout extends AdaptiveLayout {
         data.scale = this.node.scale;
         data.size = this.node.getComponent(UITransform)?.contentSize;
         data.anchorPoint = this.node.getComponent(UITransform)?.anchorPoint;
+        data.active = this.node.active;
         return data;
     }
 
@@ -73,6 +76,7 @@ export class ConditionalLayout extends AdaptiveLayout {
 
     private applyTransformData(data: TransformData) {
         const targetNode = this.node;
+        targetNode.active = data.active;
         targetNode.setPosition(data.position);
         targetNode.setRotation(data.rotation);
         targetNode.setScale(data.scale);
@@ -104,6 +108,8 @@ export class ConditionalLayout extends AdaptiveLayout {
         // Copy anchor point
         clone.anchorPoint.x = source.anchorPoint.x;
         clone.anchorPoint.y = source.anchorPoint.y;
+        // Copy active state
+        clone.active = source.active;
         return clone;
     }
 }
