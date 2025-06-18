@@ -39,7 +39,8 @@ export class ConditionalLayout extends AdaptiveLayout {
     @property({ type: TransformData })
     transformDataHorizontal: TransformData = new TransformData();
 
-    public override onResize(aspectRatio: number) { 
+
+    public override onResize(aspectRatio: number) {
         this.onWindowResize(aspectRatio);
     }
 
@@ -60,6 +61,14 @@ export class ConditionalLayout extends AdaptiveLayout {
         } else {
             this.applyTransformData(this.transformDataHorizontal);
         }
+    }
+
+    public LoadTransformDataVertical() {
+        this.applyTransformData(this.transformDataVertical);
+    }
+
+    public LoadTransformDataHorizontal() {
+        this.applyTransformData(this.transformDataHorizontal);
     }
 
     private applyTransformData(data: TransformData) {

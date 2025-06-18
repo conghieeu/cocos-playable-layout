@@ -5,6 +5,30 @@ const { ccclass, property } = _decorator;
 
 @ccclass('StretchToCameraView')
 export class StretchToCameraView extends Component {
+    @property({
+        displayName: "► Load Vertical"
+    })
+    get setDataVertical(): boolean {
+        return false;
+    }
+    set setDataVertical(value: boolean) {
+        if (value) {
+            this.LoadTransformDataVertical();
+        }
+    }
+
+    @property({
+        displayName: "► Load Horizontal"
+    })
+    get setDataHorizontal(): boolean {
+        return false;
+    }
+    set setDataHorizontal(value: boolean) {
+        if (value) {
+            this.LoadTransformDataHorizontal();
+        }
+    }
+
     // Bây giờ thuộc tính này sẽ hiển thị đúng
     @property({
         type: [AdaptiveLayout], // Dùng dấu ngoặc vuông [] để biểu thị đây là một mảng
@@ -21,6 +45,20 @@ export class StretchToCameraView extends Component {
 
     protected start(): void {
         this.onWindowResize();
+    }
+
+    public LoadTransformDataVertical() {
+        this.getAllAdaptiveLayouts();
+        this.adaptiveLayouts.forEach(element => {
+            element.getComponent(ConditionalLayout).LoadTransformDataVertical();
+        });
+    }
+
+    public LoadTransformDataHorizontal() {
+        this.getAllAdaptiveLayouts();
+        this.adaptiveLayouts.forEach(element => {
+            element.getComponent(ConditionalLayout).LoadTransformDataHorizontal();
+        });
     }
 
     public getRatio() {
@@ -52,7 +90,8 @@ export class StretchToCameraView extends Component {
     }
 
     private getAllAdaptiveLayouts() {
+        this.adaptiveLayouts.length = 0;
         const allLayouts = this.node.scene.getComponentsInChildren(AdaptiveLayout);
         this.adaptiveLayouts = allLayouts;
-    } 
+    }
 }
