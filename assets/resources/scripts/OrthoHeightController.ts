@@ -12,7 +12,7 @@ export class OrthoHeightController extends AdaptiveLayout {
         const verticalRatio = 750 / 1336;
         if (aspectRatio > 1 && aspectRatio < horizontalRatio) {
             // Vertical orientation
-            this.camera.orthoHeight = 1120 * (1 / aspectRatio);
+            this.camera.orthoHeight = 1190 * (1 / aspectRatio);
         }
         else {
             // Horizontal orientation
