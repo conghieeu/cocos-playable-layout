@@ -53,14 +53,14 @@ export class StretchToCameraView extends Component {
     public LoadTransformDataVertical() {
         this.getAllAdaptiveLayouts();
         this.adaptiveLayouts.forEach(element => {
-            element.getComponent(ConditionalLayout).LoadTransformDataVertical();
+            element.LoadTransformDataVertical();
         });
     }
 
     public LoadTransformDataHorizontal() {
         this.getAllAdaptiveLayouts();
         this.adaptiveLayouts.forEach(element => {
-            element.getComponent(ConditionalLayout).LoadTransformDataHorizontal();
+            element.LoadTransformDataHorizontal();
         });
     }
 
@@ -72,7 +72,13 @@ export class StretchToCameraView extends Component {
     onWindowResize() {
         let size = this.getSize();
         this.node.getComponent(UITransform).setContentSize(size.width, size.height);
-        this.adaptiveLayouts.forEach(layout => layout.onResize(this.getRatio()));
+        this.adaptiveLayouts.forEach(layout => {
+            if (this.getRatio() > 1) {
+                layout.LoadTransformDataHorizontal();
+            } else {
+                layout.LoadTransformDataVertical();
+            }
+        });
         let cameraOffset = this.camera.orthoHeight / 668;
         this.node.getComponent(UITransform).setContentSize(size.width * cameraOffset, size.height * cameraOffset);
     }

@@ -11,9 +11,6 @@ export class ConditionalLayout extends AdaptiveLayout {
     @property({
         displayName: "► setVertical"
     })
-    get setDataVertical(): boolean {
-        return false;
-    }
     set setDataVertical(value: boolean) {
         if (value) {
             const data = this.getTransformData();
@@ -24,9 +21,6 @@ export class ConditionalLayout extends AdaptiveLayout {
     @property({
         displayName: "► setHorizontal"
     })
-    get setDataHorizontal(): boolean {
-        return false;
-    }
     set setDataHorizontal(value: boolean) {
         if (value) {
             const data = this.getTransformData();
@@ -39,11 +33,6 @@ export class ConditionalLayout extends AdaptiveLayout {
     @property({ type: TransformData })
     transformDataHorizontal: TransformData = new TransformData();
 
-
-    public override onResize(aspectRatio: number) {
-        this.onWindowResize(aspectRatio);
-    }
-
     private getTransformData() {
         const data = new TransformData();
         data.position = this.node.position;
@@ -53,14 +42,6 @@ export class ConditionalLayout extends AdaptiveLayout {
         data.anchorPoint = this.node.getComponent(UITransform)?.anchorPoint;
         data.active = this.node.active;
         return data;
-    }
-
-    private onWindowResize(aspectRatio: number) {
-        if (aspectRatio >= 0 && aspectRatio < 1) {
-            this.applyTransformData(this.transformDataVertical);
-        } else {
-            this.applyTransformData(this.transformDataHorizontal);
-        }
     }
 
     public LoadTransformDataVertical() {
