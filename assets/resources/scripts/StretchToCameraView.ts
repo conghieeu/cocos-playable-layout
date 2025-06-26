@@ -1,6 +1,7 @@
 import { Camera, _decorator, Component, screen, view, UITransform } from 'cc';
 import { ConditionalLayout } from './ConditionalLayout';
 import { AdaptiveLayout } from './AdaptiveLayout';
+import { OrthoHeightController } from './OrthoHeightController';
 const { ccclass, property } = _decorator;
 
 @ccclass('StretchToCameraView')
@@ -78,7 +79,9 @@ export class StretchToCameraView extends Component {
             } else {
                 layout.LoadTransformDataVertical();
             }
+            layout.onResize(this.getRatio());
         });
+        this.camera.getComponent(OrthoHeightController).onResize(this.getRatio());
         let cameraOffset = this.camera.orthoHeight / 668;
         this.node.getComponent(UITransform).setContentSize(size.width * cameraOffset, size.height * cameraOffset);
     }
