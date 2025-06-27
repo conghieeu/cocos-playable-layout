@@ -11,6 +11,9 @@ export class ConditionalLayout extends AdaptiveLayout {
     @property({
         displayName: "► setVertical"
     })
+    get setDataVertical(): boolean {
+        return false;
+    }
     set setDataVertical(value: boolean) {
         if (value) {
             const data = this.getTransformData();
@@ -21,6 +24,9 @@ export class ConditionalLayout extends AdaptiveLayout {
     @property({
         displayName: "► setHorizontal"
     })
+    get setDataHorizontal(): boolean {
+        return false;
+    }
     set setDataHorizontal(value: boolean) {
         if (value) {
             const data = this.getTransformData();
